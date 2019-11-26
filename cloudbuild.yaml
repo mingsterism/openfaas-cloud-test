@@ -1,16 +1,37 @@
 steps:
-## Shinkwrap
-- name: 'asia.gcr.io/$PROJECT_ID/faas-cli:0.10.3'
-  args: ['faas-cli', 'template', 'store', 'pull', 'node8-express']
-- name: 'asia.gcr.io/$PROJECT_ID/faas-cli:0.10.3'
-  args: ['faas-cli', 'build', '--shrinkwrap']
-## Build Docker image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/timezone-shift:$REVISION_ID', '-t', 'asia.gcr.io/$PROJECT_ID/timezone-shift:latest', '-f' ,'./build/timezone-shift/Dockerfile', './build/timezone-shift/']
+  ## Shinkwrap
+  - name: "asia.gcr.io/$PROJECT_ID/faas-cli:0.10.3"
+    args: ["faas-cli", "template", "store", "pull", "node8-express"]
+  - name: "asia.gcr.io/$PROJECT_ID/faas-cli:0.10.3"
+    args: ["faas-cli", "build", "--shrinkwrap"]
+  ## Build Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "asia.gcr.io/$PROJECT_ID/timezone-shift:$REVISION_ID",
+        "-t",
+        "asia.gcr.io/$PROJECT_ID/timezone-shift:latest",
+        "-f",
+        "./build/timezone-shift/Dockerfile",
+        "./build/timezone-shift/",
+      ]
 
-## Deploy to "Cloud Run" 
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['beta', 'run', 'deploy', 'timezone-shift', '--image', 'asia.gcr.io/$PROJECT_ID/timezone-shift:$REVISION_ID', '--region', 'asia-northeast-1']
+  ## Deploy to "Cloud Run"
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: [
+        "beta",
+        "run",
+        "deploy",
+        "timezone-shift",
+        "--image",
+        "asia.gcr.io/$PROJECT_ID/timezone-shift:$REVISION_ID",
+        "--platform", # cloudrun has 3 options: managed, gke or kubernetes
+        "managed",
+        "--region",
+        "asia-northeast-1",
+      ]
 
-images: 
-- 'asia.gcr.io/$PROJECT_ID/timezone-shift'
+images:
+  - "asia.gcr.io/$PROJECT_ID/timezone-shift"
