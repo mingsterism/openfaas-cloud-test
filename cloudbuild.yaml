@@ -30,7 +30,7 @@ steps:
         "--platform", # cloudrun has 3 options: managed, gke or kubernetes
         "managed",
         "--region",
-        "asia-northeast-1",
+        "asia-northeast1",
       ]
 
 images:
